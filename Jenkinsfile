@@ -17,23 +17,14 @@ node{
     }
     
     stage('Push Docker Image'){
-        withCredentials([string(credentialsId: 'DOKCER_HUB_PASSWORD', variable: 'DOKCER_HUB_PASSWORD')]) {
-          sh "docker login -u dockerhandson -p ${DOKCER_HUB_PASSWORD}"
+        withCredentials([string(credentialsId: 'Docker_Hub_ID', variable: 'Docker_Hub_ID')]) {
+          sh "docker login -u dockerhandson -p ${Docker_Hub_ID}"
         }
         sh 'docker push dockerhandson/spring-boot-mongo'
      }
-     
-     stage("Deploy To Kuberates Cluster"){
-       kubernetesDeploy(
-         configs: 'springBootMongo.yml', 
-         kubeconfigId: 'KUBERNATES_CONFIG',
-         enableConfigSubstitution: true
-        )
-     }
-	 
-	  /**
+
       stage("Deploy To Kuberates Cluster"){
-        sh 'kubectl apply -f pringBootMongo.yml'
-      } **/
+        sh 'kubectl apply -f springBootMongo.yml'
+      }
      
 }
